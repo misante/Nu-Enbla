@@ -72,7 +72,7 @@ const Cart = ({ userCart }) => {
               </>
             );
           })}
-          <Link href={"/checkout?restaurant=" + userCart[0].restaurant.name}>
+          <Link href={"/checkout?restaurant=" + userCart[0].restaurant.slug}>
             <Button className="bg-yellow-600 flex justify-center w-full">
               Checkout AED {CalculateTotal()}
             </Button>

@@ -1,12 +1,17 @@
 "use client";
 import Image from "next/image";
 import MapPin from "./MapPin";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { CartContext } from "@/app/_context/CartContext";
 
 const RestroDetail = ({ restaurant }) => {
   const [totalReview, setTotalReview] = useState();
   const [averageReview, setAverageReview] = useState();
+  const { updateCart, setUpdateCart } = useContext(CartContext);
 
+  useEffect(() => {
+    setUpdateCart(!updateCart);
+  }, []);
   useEffect(() => {
     restaurant && CalculateRating();
   }, [restaurant]);

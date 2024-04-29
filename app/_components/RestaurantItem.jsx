@@ -1,7 +1,6 @@
 import Image from "next/image";
 
-const RestaurantItem = ({ restaurant, userCart }) => {
-  console.log(userCart);
+const RestaurantItem = ({ restaurant }) => {
   const CalculateRating = () => {
     let total = 0;
     let count = 0;
@@ -21,8 +20,8 @@ const RestaurantItem = ({ restaurant, userCart }) => {
         alt={restaurant.name}
         className="h-[200px] object-cover border rounded-lg hover:object-center transition-all duration-1000"
       />
-      <h3 className="text-md font-extrabold">{restaurant.name}</h3>
-      <div className="flex justify-between items-center ">
+      <h3 className="text-md text-center font-extrabold">{restaurant.name}</h3>
+      <div className="flex justify-center items-center ">
         <div className="flex gap-1 object-cover">
           <Image
             src="/star.png"
@@ -36,9 +35,9 @@ const RestaurantItem = ({ restaurant, userCart }) => {
             {restaurant.restaurantType[0]}
           </label>
         </div>
-        <h3 className="text-sm font-bold px-2">
+        {/* <h3 className="text-sm font-bold px-2">
           {restaurant.categories[0].name}
-        </h3>
+        </h3> */}
       </div>
     </>
   );

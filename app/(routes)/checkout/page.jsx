@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import GlobalApi from "@/app/_utils/GlobalApi";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 const checkout = () => {
   const params = useSearchParams();
-
+  const restauroName = params.get("restaurant");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -26,18 +26,26 @@ const checkout = () => {
   const { user } = useUser();
   const { updateCart, setUpdateCart } = useContext(CartContext);
   const [userCart, setUserCart] = useState([]);
+  // const [restauroName, setRestauroName] = useState("");
+
   const router = useRouter();
+
+  useEffect(() => {
+    setUpdateCart(updateCart);
+  }, []);
+
   useEffect(() => {
     user && getCartDetail();
-  }, [updateCart]);
+  }, [updateCart && user]);
 
   const getCartDetail = () => {
-    GlobalApi.GetUserCart(user?.primaryEmailAddress.emailAddress).then(
-      (resp) => {
-        setUserCart(resp?.userCarts);
-        calculatTotals(resp?.userCarts);
-      }
-    );
+    GlobalApi.GetUserCart(
+      user?.primaryEmailAddress.emailAddress,
+      restauroName
+    ).then((resp) => {
+      setUserCart(resp?.userCarts);
+      calculatTotals(resp?.userCarts);
+    });
   };
   const calculatTotals = (cart) => {
     let total = 0;
@@ -70,7 +78,7 @@ const checkout = () => {
               item.price,
               item.productName,
               orderId,
-              user.primaryEmailAddress.emailAddress
+              user?.primaryEmailAddress.emailAddress
             ).then((resp) => {
               toast("order updated successfully!!");
               setLoading(false);

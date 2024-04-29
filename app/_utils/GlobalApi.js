@@ -135,7 +135,7 @@ const GetUserCart = async (userEmail, slug) => {
     query GetUserCart {
       userCarts(where: { email: "` +
     userEmail +
-    `" , restaurant: {slug: "` +
+    `", restaurant: {slug: "` +
     slug +
     `"}}, first: 50) {
         email

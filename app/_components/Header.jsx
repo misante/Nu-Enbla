@@ -33,32 +33,31 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const Header = () => {
   const params = usePathname();
+  const restauraName = params.split("/")[2];
+
   const { user, isSignedIn } = useUser();
   const { updateCart, setUpdateCart } = useContext(CartContext);
   const [userCart, setUserCart] = useState([]);
-  const [restaurantName, setRestaurantName] = useState("");
-  const router = useRouter();
+  // const [restauraName, setRestauraName] = useState(rn);
+
   useEffect(() => {
+    console.log(restauraName);
     setUpdateCart(!updateCart);
   }, []);
 
   useEffect(() => {
-    setRestaurantName(params.split("/")[2]);
-    user &&
-      getCartDetail(user?.primaryEmailAddress.emailAddress, restaurantName);
+    user && getCartDetail();
   }, [updateCart && user]);
 
-  const getCartDetail = (userEmail, slug) => {
-    GlobalApi.GetUserCart(userEmail, slug).then((resp) => {
+  const getCartDetail = () => {
+    GlobalApi.GetUserCart(
+      user?.primaryEmailAddress.emailAddress,
+      restauraName
+    ).then((resp) => {
       setUserCart(resp?.userCarts);
     });
   };
-  useEffect(() => {
-    const refreshPage = () => {
-      router.refresh(); // This reloads the current route
-    };
-    refreshPage();
-  }, []);
+
   return (
     <>
       <nav className="p-6 flex w-full mb-4 shadow-md h-20 items-center justify-between">
@@ -97,9 +96,7 @@ const Header = () => {
                 <Cart userCart={userCart} />
               </PopoverContent>
             </Popover>
-
             {/* <UserButton afterSignOutUrl="/" /> */}
-
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Image

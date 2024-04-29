@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import GlobalApi from "../_utils/GlobalApi";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { CartContext } from "../_context/CartContext";
 
 const CategoryList = () => {
   const listRef = useRef(null);
   const [category, setCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const params = useSearchParams();
+  const { updateCart, setUpdateCart } = useContext(CartContext);
 
   useEffect(() => {
     setSelectedCategory(params.get("category"));
@@ -18,6 +20,7 @@ const CategoryList = () => {
 
   useEffect(() => {
     getCategoryList();
+    setUpdateCart(!updateCart);
   }, []);
 
   const getCategoryList = () => {
@@ -29,6 +32,14 @@ const CategoryList = () => {
     if (listRef.current) {
       listRef.current.scrollBy({
         left: 200,
+        behavior: "smooth",
+      });
+    }
+  };
+  const scrollHandlerLeft = () => {
+    if (listRef.current) {
+      listRef.current.scrollBy({
+        left: -200,
         behavior: "smooth",
       });
     }
@@ -72,8 +83,16 @@ const CategoryList = () => {
           alt="scroll"
           width={40}
           height={40}
-          className="cursor-pointer right-0 top-32 absolute"
+          className="cursor-pointer right-0 top-16 absolute"
           onClick={() => scrollHandler()}
+        />
+        <Image
+          src="/arrow_small.png"
+          alt="scroll"
+          width={40}
+          height={40}
+          className="cursor-pointer left-0 top-16 absolute rotate-180 text-gray-400"
+          onClick={() => scrollHandlerLeft()}
         />
       </div>
     </>
